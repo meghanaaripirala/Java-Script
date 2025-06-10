@@ -1,0 +1,19 @@
+java script is a programming language used to create dynamic web pages.
+interpreted language it executes by line by line code
+Client side: in cline side it works with html and css  where html is structure to page css gives style to page and JS gives life by allowing interact with users
+Server side: On server side JS goes with the databases,files handling, and security features to send resposes to browser
+al most all browsers have the java script  interpreter and do not want to download any sofftware.There is also a browser console where you can test your JavaScript code.
+It is highly in demand, offering many job opportunities in Frontend, Backend (Node.js), and Full Stack Development.
+React, Angular, Vue.js, Node.js, and Express.js are the frameworks supported by JS
+Your browser can run JavaScript directly, so there's no need to install a compiler. However, the built-in console isn’t very beginner-friendly.
+console.log("Hello World!");
+JavaScript is a single-threaded language that executes one task at a time.
+1.) Es1-Es5 :- bsic syntax, domain manipulations, events and functions (97-99)
+
+2.) Es5     :-big milestone. array.functions, map, filter let const arrow functions classes and modules   
+
+3.) Es6     :- the big update exponential operator released
+
+4.) Es7-Es13:- small yearly updates
+People use ES6 mostly because it introduced modern, cleaner, and more powerful features that make JavaScript easier to write, read, and maintain.
+
