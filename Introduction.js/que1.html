@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function evaluateStudentStatus(marks, age) {
+  if (marks >= 90) {
+    return "Grade A";
+  } else if (age < 18) {
+    return "Eligible for scholarship";
+  } else if (marks >= 70 && marks < 90) {
+    return "Grade B";
+  } else if (age > 21) {
+    return "Try again next year";
+  } else {
+    return "Fail";
+  }
+}
+console.log(evaluateStudentStatus(92, 22)); 
+console.log(evaluateStudentStatus(85, 17));  
+console.log(evaluateStudentStatus(75, 25)); 
+console.log(evaluateStudentStatus(65, 19)); 
+           
+            
+    </script>
+</body>
+</html>

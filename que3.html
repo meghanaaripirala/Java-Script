@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function getDiscount(cartValue, Prime, Coupon) {
+  if (cartValue > 500) {
+    return Prime ? "20 percent discount" : (Coupon ? "10 percent discount" : "5 percent discount");
+  } else {
+    return Coupon ? "10 percent discount" : (Prime ? "5 percent discount" : "No discount");
+  }
+}
+console.log(getDiscount(1000, 22)); 
+console.log(getDiscount(500, 17));  
+console.log(getDiscount(1500, 25)); 
+console.log(getDiscount(800,19)); 
+    </script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+here for loop is used to repeat some code multiple times usually we do how many times we need the loop 
+Let’s break this into 3 parts:
+Initialization → Start the loop (usually declare a counter, like let i = 0)
+Condition → Check if the loop should run again (i < 5)
+Update → Update the counter (i++, which means i = i + 1)
+Once an iteration of the loop is completed, the condition is evaluated again. The process continues until the condition is false.
+
+//for (initialization; condition; update) {
+    // code to repeat
+}
+
+this is how we would write the for loop here here 
+Initializes the counter variable (let i = 1).
+Tests the condition (i <= 3); runs while true.
+Executes the loop body and increments the counter (i++).
+Mistake 	            What happens
+Missing i++ 	        Infinite loop (never ends)
+Wrong condition	        Loop may not run at all
+Changing i inside loop  wrongly	Unexpected output
+
+//////for in loop is used to print the indexes of the object or key 
+for off loop is used to print the values of the objects
+for(let i of [1,2,3,4]){
+    clg(i)//1,2,3,4 o/t
+}
+let arr=[1,2,3,4]
+for(let i in arr){
+       clg(arr[i])//0,1,2,3,4(index is printing)
+}////////
+ 
+
+//// NESTED LOOP //////
+A nested loop means:
+A for loop inside another for loop.
+It’s like a loop running inside another loop.
+Used for rows and columns, patterns, grids, or tables
+////
+for (let i = 1; i <= outerLimit; i++) {         // Outer loop
+  for (let j = 1; j <= innerLimit; j++) {       // Inner loop
+    // Code inside both loops
+  }
+}
+Common Uses of Nested Loops:
+Printing tables
+Drawing patterns (like triangles or squares)
+Working with rows and columns
+Nested array or matrix data
+ Want More?
+Would you like to try:
+Triangle numbers?
+Reverse patterns?
+Tables using loops?
+Let me know and I’ll show you easily! 
+for(let i=1;i<=10;i++){
+    clg('i',i)
+    for(let j=1;j<=7;j++)
+    clg('j',j)
+}
+here first for loop is a looping statement it will run until i false after that after printing clg then 
+it will moves to next loop which is for loop which would satisfies when first loop is satisfies after that satisfies then 2 loop also 
+satisfer is will print this 2 loop will runs until it fails 
+use debugger for the better explanation 
+////NESTED FOR IN LOOP :////
+const student = {
+  name: "Meghana",
+  age: 21,
+  marks: {
+    math: 90,
+    english: 85
+  }
+};
+
+for (let key in student) {
+  console.log(key, ":", student[key]);
+
+  if (typeof student[key] === "object") {
+    for (let subKey in student[key]) {
+      console.log("  ", subKey, ":", student[key][subKey]);
+    }
+  }
+}
+
+ We made an object called student.
+It has:
+name: a string
+age: a number
+marks: an object with subject marks
+The outer loop prints each property.
+The inner loop only runs when it finds the marks object, and prints each subject and score.
+
+Let’s break it:
+student[key] → This gives the value of the current key (like Meghana, 21, or { math: 90, english: 85 })
+typeof student[key] → This checks the type of that value.
+
+
+
+/// LOOPS WITH ARRAYS ///
+An array is like a basket that holds many values.
+lets take a array with elemets of 3 which would want ot display in thehtml document we use do document.getElementById("output"); this thing 
+let fruits = ["apple", "banana", "mango"];
+ this is the array which has 3 items 
+
+
+ let fruits = ["apple", "banana", "mango"];
+let output = document.getElementById("output");
+// Loop through the array
+for (let i = 0; i < fruits.length; i++) {
+  output.innerHTML += fruits[i] + "<br>";
+}
+ 
+here the list of array is linked with html document fruits.length tells about lenth of array
+
+| Part        | Meaning                                                     |
+| ----------- | ----------------------------------------------------------- |
+| `output`    | This is the **HTML element** with ID `"output"`             |
+| `innerHTML` | This means the **content inside** that HTML element         |
+| `+=`        | This means **add to what’s already there** (don’t erase it) |
+| `fruits[i]` | Get one fruit from the array, like `"Apple"`                |
+| `"<br>"`    | Add a **line break** (go to next line)                      |
+
+First time: fruits[0] = "Apple" →
+→ output.innerHTML becomes: Apple<br>
+Second time: fruits[1] = "Banana" →
+→ output.innerHTML becomes: Apple<br>Banana<br>
+Third time: fruits[2] = "Mango" →
+→ output.innerHTML becomes: Apple<br>Banana<br>Mango<br>
+
+✅ window.onload = function() { ... }
+It means:
+
+Wait until the whole webpage loads, then run the JavaScript inside the function.
+

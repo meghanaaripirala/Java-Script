@@ -1,0 +1,53 @@
+<!--Q1
+ <ul id="productList"></ul>
+
+<script>
+let products = ["Laptop", "Mobile", "Camera", "Shoes", "Earphones"];
+let list = "";
+for (let i = 0; i < products.length; i++) {
+  list += `<li>${products[i]}</li>`;
+}
+document.getElementById("productList").innerHTML = list;
+</script> -->
+
+<!-- Q2
+<table border="1">
+  <tr><th>Original</th><th>Discounted</th></tr>
+  <tbody id="discountBody"></tbody>
+</table>
+<script>
+    let prices =[1000,2000,3000,1500]
+    let rows =" ";
+    for(let i=0;i<prices.length;i++){
+        let discount = prices*0.1;
+        let final=prices[i]-discount;
+        rows += `<tr><td>${prices[i]}</td><td>${final}</td></tr>`;
+    }
+    document.getElementById("discount table").innerHTML = rows;
+        </script> -->
+
+<!-- Q3
+<div id="cards"></div>
+
+<script>
+let products = [
+  { name: "Shirt", price: 500, category: "Clothing" },
+  { name: "Watch", price: 1200, category: "Accessories" }
+];
+ let output = "";
+for (let i = 0; i < products.length; i++) {
+ 
+    output += `
+    <div style="border:1px solid black; margin:10px; padding:10px;width:200px">
+      <h3>${products[i].name}</h3>
+      <p>Price: ${products[i].price}</p>
+      <p>Category: ${products[i].category}</p>
+    </div>`;
+}
+document.getElementById("cards").innerHTML = output;
+</script> -->
+
+
+
+
+
