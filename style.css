@@ -1,0 +1,40 @@
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fce4ec;
+      text-align: center;
+      padding: 30px;
+    }
+    form {
+      background-color: #fff0f5;
+      padding: 20px;
+      border-radius: 10px;
+      display: inline-block;
+      box-shadow: 0 0 10px #aaa;
+    }
+    input {
+      margin: 10px;
+      padding: 8px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      width: 80%;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #ec407a;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    #billCard {
+      background-color: #fff;
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 10px;
+      width: 300px;
+      display: inline-block;
+      box-shadow: 0 0 10px #999;
+      display: none;
+    }

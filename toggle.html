@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Theme Toggle</title>
+  <style>
+    body {
+      font-family: Arial;
+      background-color: white;
+      color: black;
+      transition: 0.4s;
+      text-align: center;
+      padding: 50px;
+    }
+
+    .dark-theme {
+      background-color: #121212;
+      color: white;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      background-color: #333;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background-color: #555;
+    }
+  </style>
+</head>
+<body>
+  <h1>Theme Toggle Example</h1>
+  <p>Click the button to switch theme!</p>
+  <button onclick="toggleTheme()">Toggle Theme</button>
+
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle("dark-theme");
+    }
+  </script>
+</body>
+</html>

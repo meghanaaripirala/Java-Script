@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Car Booking</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    #products {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 5%;
+    }
+
+    .product {
+      background-color: white;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin: 10px;
+      padding: 20px;
+      width: 250px;
+      text-align: center;
+    }
+
+    .product img {
+      max-width: 100%;
+      height: 150px;
+      object-fit: cover;
+    }
+
+    .product h3 {
+      color: #555;
+    }
+
+    .product p {
+      color: #888;
+    }
+
+    discount {
+      color: red;
+      font-weight: bold;
+    }
+
+    button {
+      background-color: #28a745;
+      margin-top: 20px;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .in-stock {
+      background-color: green;
+    }
+
+    .out-of-stock {
+      background-color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="product-container">
+    <center><h1>Car Booking</h1></center>
+    <div id="products"></div>
+  </div>
+
+  <script>
+    const cars = [
+      {
+        id: "car1",
+        name: "Honda City",
+        stock: 3,
+        img: "https://imgd.aeplcdn.com/664x374/n/cw/ec/53667/city-exterior-right-front-three-quarter.jpeg",
+        price: "₹12,00,000",
+        discount: "10%",
+        originalPrice: "₹13,33,000"
+      },
+      {
+        id: "car2",
+        name: "Tata Nexon",
+        stock: 0,
+        img: "https://imgd.aeplcdn.com/664x374/n/cw/ec/147021/nexon-exterior-right-front-three-quarter-3.jpeg",
+        price: "₹11,00,000",
+        discount: "12%",
+        originalPrice: "₹12,50,000"
+      },
+      {
+        id: "car3",
+        name: "Hyundai Creta",
+        stock: 5,
+        img: "https://imgd.aeplcdn.com/664x374/n/cw/ec/144667/creta-exterior-right-front-three-quarter.jpeg",
+        price: "₹13,00,000",
+        discount: "8%",
+        originalPrice: "₹14,13,000"
+      },
+      {
+        id: "car4",
+        name: "Mahindra Thar",
+        stock: 2,
+        img: "https://imgd.aeplcdn.com/664x374/n/cw/ec/144695/thar-exterior-right-front-three-quarter.jpeg",
+        price: "₹14,50,000",
+        discount: "10%",
+        originalPrice: "₹16,11,000"
+      }
+    ];
+
+    const productContainer = document.getElementById("products");
+
+    cars.forEach((car) => {
+      const card = document.createElement("div");
+      card.classList.add("product");
+      card.innerHTML = `
+        <img src="${car.img}" alt="${car.name}">
+        <h3>Model: ${car.name}</h3>
+        <p>Price: <strike>${car.originalPrice}</strike> ${car.price}</p>
+        <discount>Discount: ${car.discount}</discount><br>
+        <button id="${car.id}">${car.stock > 0 ? "Book" : "Out of Stock"}</button>
+      `;
+
+      const button = card.querySelector("button");
+      button.classList.add(car.stock > 0 ? "in-stock" : "out-of-stock");
+
+      button.addEventListener("click", () => {
+        if (car.stock > 0) {
+          alert( You have booked: ${car.name});
+          car.stock--;
+          if (car.stock === 0) {
+            button.textContent = "Out of Stock";
+            button.classList.remove("in-stock");
+            button.classList.add("out-of-stock");
+          }
+        } else {
+          alert(${car.name} is out of stock!);
+        }
+      });
+
+      productContainer.appendChild(card);
+    });
+  </script>
+</body>
+</html>
