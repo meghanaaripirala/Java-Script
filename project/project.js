@@ -1,4 +1,4 @@
-/* ===== ELEMENTS ===== */
+
 const drawer = document.getElementById('drawer');
 const backdrop = document.getElementById('backdrop');
 const hamburger = document.getElementById('hamburger');
@@ -10,6 +10,9 @@ const searchBtn = document.getElementById('searchBtn');
 
 const categoriesGrid = document.getElementById('categoriesGrid');
 const mealsGrid = document.getElementById('mealsGrid');
+const mealsSection = document.getElementById('mealsSection');
+const mealsHeading = document.getElementById('mealsHeading');
+const categoriesSection = document.getElementById('categoriesSection');
 
 const categoryAbout = document.getElementById('categoryAbout');
 const aboutTitle = document.getElementById('aboutTitle');
@@ -25,72 +28,89 @@ const ingredientsList = document.getElementById('ingredientsList');
 const measureList = document.getElementById('measureList');
 const instructionsList = document.getElementById('instructionsList');
 
-/* ===== STATE ===== */
-let CATEGORIES = [];        // full category data with descriptions
-let CATEGORY_MAP = {};      // quick lookup by name
+// Store categories
+let allCategories = [];
+let categoryInfo = {};
 
-/* ===== HELPERS ===== */
+// API links
 const api = {
-  categories: "https://www.themealdb.com/api/json/v1/1/categories.php",
-  search: (q) => `https://www.themealdb.com/api/json/v1/1/search.php?s=${encodeURIComponent(q)}`,
-  filterByCat: (c) => `https://www.themealdb.com/api/json/v1/1/filter.php?c=${encodeURIComponent(c)}`,
-  details: (id) => `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${encodeURIComponent(id)}`
+  categories: 'https://www.themealdb.com/api/json/v1/1/categories.php',
+  search: q => `https://www.themealdb.com/api/json/v1/1/search.php?s=${q}`,
+  byCategory: c => `https://www.themealdb.com/api/json/v1/1/filter.php?c=${c}`,
+  details: id => `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`
 };
 
-const openDrawer = () => { drawer.classList.add('open'); backdrop.classList.add('show'); }
-const closeDrawer = () => { drawer.classList.remove('open'); backdrop.classList.remove('show'); }
+// Switch sections
+function showView(type) {
+  detailsSection.classList.add('hidden');
+  categoryAbout.classList.add('hidden');
+  mealsSection.classList.add('hidden');
+  categoriesSection.classList.add('hidden');
 
-/* ===== UI WIRES ===== */
-hamburger.addEventListener('click', openDrawer);
-drawerClose.addEventListener('click', closeDrawer);
-backdrop.addEventListener('click', closeDrawer);
+  if (type === 'home') categoriesSection.classList.remove('hidden');
+  if (type === 'category') {
+    categoryAbout.classList.remove('hidden');
+    mealsSection.classList.remove('hidden');
+    categoriesSection.classList.remove('hidden');
+  }
+  if (type === 'details') {
+    detailsSection.classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
 
-searchBtn.addEventListener('click', () => doSearch());
-searchInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ doSearch(); }});
-
-/* Delegate clicks inside mealsGrid so cards always work */
-mealsGrid.addEventListener('click', (e) => {
-  const card = e.target.closest('[data-id]');
-  if (!card) return;
-  const id = card.getAttribute('data-id');
-  showMealDetails(id);
-  window.scrollTo({ top: detailsSection.offsetTop - 10, behavior: 'smooth' });
+// Drawer open/close
+hamburger.addEventListener('click', () => {
+  drawer.classList.add('open');
+  backdrop.classList.add('show');
+});
+drawerClose.addEventListener('click', () => {
+  drawer.classList.remove('open');
+  backdrop.classList.remove('show');
+});
+backdrop.addEventListener('click', () => {
+  drawer.classList.remove('open');
+  backdrop.classList.remove('show');
 });
 
-/* Delegate clicks in categoriesGrid */
-categoriesGrid.addEventListener('click', (e) => {
-  const cat = e.target.closest('[data-cat]');
-  if (!cat) return;
-  const name = cat.getAttribute('data-cat');
-  loadMealsByCategory(name);
-  window.scrollTo({ top: document.querySelector('.section').offsetTop - 10, behavior: 'smooth' });
+// Search meals
+searchBtn.addEventListener('click', searchMeals);
+searchInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter') searchMeals();
 });
 
-/* Drawer category click */
-drawerList.addEventListener('click', (e) => {
-  const li = e.target.closest('li[data-cat]');
-  if (!li) return;
-  closeDrawer();
-  const name = li.getAttribute('data-cat');
-  loadMealsByCategory(name);
-  window.scrollTo({ top: document.querySelector('.section').offsetTop - 10, behavior: 'smooth' });
-});
+async function searchMeals() {
+  const query = searchInput.value.trim();
+  if (!query) {
+    showView('home');
+    return;
+  }
+  const res = await fetch(api.search(query));
+  const data = await res.json();
+  const meals = data.meals || [];
 
-/* ===== LOAD CATEGORIES ===== */
-async function loadCategories(){
+  mealsHeading.textContent = "Meals";
+  displayMeals(meals);
+  showView('category');
+}
+
+// Load categories
+async function loadCategories() {
   const res = await fetch(api.categories);
-  const { categories } = await res.json();
-  CATEGORIES = categories || [];
-  CATEGORY_MAP = Object.fromEntries(CATEGORIES.map(c => [c.strCategory, c]));
+  const data = await res.json();
+  allCategories = data.categories;
+
+  // Save category details
+  allCategories.forEach(c => categoryInfo[c.strCategory] = c);
 
   // Drawer list
-  drawerList.innerHTML = CATEGORIES
-    .map(c => `<li data-cat="${c.strCategory}">${c.strCategory}</li>`)
-    .join('');
+  drawerList.innerHTML = allCategories.map(c =>
+    `<li data-cat="${c.strCategory}">${c.strCategory}</li>`
+  ).join('');
 
-  // Grid
-  categoriesGrid.innerHTML = CATEGORIES.map(c => `
-    <article class="card" data-cat="${c.strCategory}" title="${c.strCategory}">
+  // Cards grid
+  categoriesGrid.innerHTML = allCategories.map(c => `
+    <article class="card" data-cat="${c.strCategory}">
       <img src="${c.strCategoryThumb}" alt="${c.strCategory}">
       <div class="card-body">
         <span class="badge">${c.strCategory.toUpperCase()}</span>
@@ -99,111 +119,120 @@ async function loadCategories(){
   `).join('');
 }
 
-/* ===== SEARCH ===== */
-async function doSearch(){
-  const q = searchInput.value.trim();
-  categoryAbout.classList.add('hidden'); // Hide category about when searching
-  if(!q){ mealsGrid.innerHTML = ''; return; }
+categoriesGrid.addEventListener('click', e => {
+  const card = e.target.closest('[data-cat]');
+  if (!card) return;
+  loadMeals(card.dataset.cat);
+});
 
-  const res = await fetch(api.search(q));
+drawerList.addEventListener('click', e => {
+  const li = e.target.closest('li[data-cat]');
+  if (!li) return;
+  drawer.classList.remove('open');
+  backdrop.classList.remove('show');
+  loadMeals(li.dataset.cat);
+});
+
+// Load meals of a category
+async function loadMeals(catName) {
+  const cat = categoryInfo[catName];
+  aboutTitle.textContent = cat.strCategory;
+  aboutText.textContent = cat.strCategoryDescription;
+
+  const res = await fetch(api.byCategory(catName));
   const data = await res.json();
   const meals = data.meals || [];
-  renderMeals(meals);
+
+  mealsHeading.textContent = "Meals";
+  displayMeals(meals, catName);
+  showView('category');
 }
 
-/* ===== FILTER BY CATEGORY ===== */
-async function loadMealsByCategory(categoryName){
-  // Show description box
-  const cat = CATEGORY_MAP[categoryName];
-  if (cat){
-    aboutTitle.textContent = cat.strCategory;
-    aboutText.textContent = cat.strCategoryDescription;
-    categoryAbout.classList.remove('hidden');
-  }else{
-    categoryAbout.classList.add('hidden');
+// Show meals on screen
+function displayMeals(meals, catName) {
+  if (!meals.length) {
+    mealsGrid.innerHTML = "<p>No meals found.</p>";
+    return;
   }
 
-  const res = await fetch(api.filterByCat(categoryName));
-  const data = await res.json();
-  const meals = data.meals || [];
-  renderMeals(meals, categoryName);
-}
-
-/* ===== RENDER MEAL CARDS ===== */
-function renderMeals(meals, catName){
-  detailsSection.classList.add('hidden'); // hide details when listing
-
   mealsGrid.innerHTML = meals.map(m => `
-    <article class="card" data-id="${m.idMeal}" title="${m.strMeal}">
+    <article class="card" data-id="${m.idMeal}">
       <img src="${m.strMealThumb}" alt="${m.strMeal}">
       <div class="card-body">
-        ${catName ? `<span class="badge">${catName}</span>` : ''}
+        ${catName ? `<span class="badge">${catName}</span>` : ""}
         <div class="card-title">${m.strMeal}</div>
       </div>
     </article>
   `).join('');
-
-  if(meals.length === 0){
-    mealsGrid.innerHTML = `<p style="color:#666">No meals found.</p>`;
-  }
 }
 
-/* ===== MEAL DETAILS ===== */
-async function showMealDetails(id){
+mealsGrid.addEventListener('click', e => {
+  const card = e.target.closest('[data-id]');
+  if (!card) return;
+  showMeal(card.dataset.id);
+});
+
+// Show details of one meal
+async function showMeal(id) {
   const res = await fetch(api.details(id));
   const data = await res.json();
   const meal = data.meals && data.meals[0];
-  if(!meal) return;
+  if (!meal) return;
 
-  // Breadcrumb (like screenshot title bar)
-  breadcrumb.textContent = `▶ ${meal.strMeal}`;
-
-  // Basic meta
+  breadcrumb.textContent = meal.strMeal;
   detailsImg.src = meal.strMealThumb;
-  detailsImg.alt = meal.strMeal;
-  detailsCategory.textContent = meal.strCategory || '-';
-  detailsSource.textContent = meal.strSource ? new URL(meal.strSource).hostname : '—';
-  detailsSource.href = meal.strSource || '#';
+  detailsCategory.textContent = meal.strCategory || "-";
+
+  // Source link
+  if (meal.strSource && meal.strSource.startsWith("http")) {
+    detailsSource.textContent = new URL(meal.strSource).hostname;
+    detailsSource.href = meal.strSource;
+  } else {
+    detailsSource.textContent = "—";
+    detailsSource.removeAttribute("href");
+  }
 
   // Tags
-  detailsTags.innerHTML = '';
-  if (meal.strTags){
-    meal.strTags.split(',').map(t=>t.trim()).filter(Boolean).forEach(t=>{
-      const span = document.createElement('span');
-      span.className = 'tag';
-      span.textContent = t;
+  detailsTags.innerHTML = "";
+  if (meal.strTags) {
+    meal.strTags.split(",").forEach(tag => {
+      const span = document.createElement("span");
+      span.className = "tag";
+      span.textContent = tag.trim();
       detailsTags.appendChild(span);
     });
   }
 
-  // Ingredients + measures (1..20)
-  ingredientsList.innerHTML = '';
-  measureList.innerHTML = '';
-  for (let i=1; i<=20; i++){
+  // Ingredients + measures
+  ingredientsList.innerHTML = "";
+  measureList.innerHTML = "";
+  for (let i = 1; i <= 20; i++) {
     const ing = meal[`strIngredient${i}`];
     const meas = meal[`strMeasure${i}`];
-    if(ing && ing.trim()){
-      const liI = document.createElement('li');
-      liI.textContent = ing;
-      ingredientsList.appendChild(liI);
+    if (ing && ing.trim()) {
+      const li1 = document.createElement("li");
+      li1.textContent = ing;
+      ingredientsList.appendChild(li1);
 
-      const liM = document.createElement('li');
-      liM.textContent = (meas || '').trim();
-      measureList.appendChild(liM);
+      const li2 = document.createElement("li");
+      li2.textContent = (meas || "").trim();
+      measureList.appendChild(li2);
     }
   }
 
-  // Instructions -> split into steps
-  const steps = (meal.strInstructions || '')
-    .replace(/\r/g,'')
-    .split(/\n+/)
-    .map(s => s.trim())
-    .filter(Boolean);
+  // Instructions
+  instructionsList.innerHTML = "";
+  (meal.strInstructions || "").split("\n").forEach(step => {
+    if (step.trim()) {
+      const li = document.createElement("li");
+      li.textContent = step;
+      instructionsList.appendChild(li);
+    }
+  });
 
-  instructionsList.innerHTML = steps.map(s => `<li>${s}</li>`).join('');
-
-  detailsSection.classList.remove('hidden');
+  showView('details');
 }
 
-/* ===== INIT ===== */
+// Start
 loadCategories();
+showView('home');
